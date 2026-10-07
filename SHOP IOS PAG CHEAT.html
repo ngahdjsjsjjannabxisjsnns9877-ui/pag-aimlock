@@ -1,0 +1,2262 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHOP ACC GAME - Thanh Toán QR</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+        }
+        body {
+            background: linear-gradient(145deg, #0b0e1a 0%, #1a1f2f 100%);
+            min-height: 100vh;
+            color: #f0f3fa;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            background: rgba(18, 24, 40, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 60px;
+            border: 1px solid #2e3a5c;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo i {
+            font-size: 2.2rem;
+            color: #3b82f6;
+            text-shadow: 0 0 15px #3b82f6;
+        }
+        .logo h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #a0c8ff, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .btn-admin {
+            background: #1e2a44;
+            border: 1px solid #3b4b6e;
+            padding: 12px 20px;
+            border-radius: 40px;
+            color: #facc15;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-admin:hover {
+            background: #2a3a5e;
+            border-color: #facc15;
+        }
+        .price-banner {
+            background: linear-gradient(90deg, #f59e0b, #ef4444);
+            padding: 15px 25px;
+            border-radius: 50px;
+            text-align: center;
+            font-weight: 800;
+            font-size: 1.3rem;
+            margin-bottom: 35px;
+            box-shadow: 0 10px 30px #ef444440;
+            color: white;
+            letter-spacing: 1px;
+        }
+        .price-banner i {
+            margin-right: 10px;
+        }
+        .products-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            align-items: center;
+        }
+        .product-card {
+            background: linear-gradient(145deg, #141c2c, #0f1522);
+            border-radius: 32px;
+            padding: 0;
+            border: 1px solid #26334d;
+            box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 550px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #facc15, #ef4444);
+            z-index: 2;
+        }
+        .product-image-wrap {
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            border-radius: 32px 32px 0 0;
+        }
+        .product-image-wrap img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+        .product-card:hover .product-image-wrap img {
+            transform: scale(1.05);
+        }
+        .product-image-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, #ef4444, #b91c1c);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-weight: 800;
+            font-size: 0.9rem;
+            box-shadow: 0 5px 20px #ef444480;
+            letter-spacing: 1px;
+            z-index: 2;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .product-image-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(to top, #141c2c, transparent);
+            pointer-events: none;
+        }
+        .product-content {
+            padding: 30px 40px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 100%;
+        }
+        .product-title {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #ffffff, #a0c8ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            word-break: break-word;
+        }
+        .product-desc {
+            color: #9aa9c4;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            max-width: 400px;
+        }
+        .product-price {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #facc15;
+            text-shadow: 0 0 25px #facc1560;
+            margin-bottom: 10px;
+        }
+        .stock-info {
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+            padding: 8px 20px;
+            border-radius: 30px;
+            background: #1e2a44;
+            border: 1px solid #3b82f660;
+        }
+        .stock-info.in-stock {
+            color: #22c55e;
+            border-color: #22c55e60;
+        }
+        .stock-info.out-stock {
+            color: #ef4444;
+            border-color: #ef444460;
+        }
+        .btn-buy {
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            border: none;
+            padding: 20px 50px;
+            border-radius: 50px;
+            color: white;
+            font-weight: 800;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            border: 1px solid #60a5fa40;
+            box-shadow: 0 15px 30px -8px #1e3a8a;
+            width: 100%;
+            max-width: 350px;
+        }
+        .btn-buy:hover:not(:disabled) {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            box-shadow: 0 20px 40px -5px #2563eb;
+            transform: translateY(-3px);
+        }
+        .btn-buy:disabled {
+            background: #2a2a2a;
+            color: #666;
+            cursor: not-allowed;
+            box-shadow: none;
+            border-color: #333;
+        }
+        .empty-shop {
+            text-align: center;
+            padding: 60px 20px;
+            color: #7a89a3;
+            max-width: 550px;
+            margin: 0 auto;
+            background: linear-gradient(145deg, #141c2c, #0f1522);
+            border-radius: 32px;
+            border: 1px solid #26334d;
+            width: 100%;
+        }
+        .empty-shop i {
+            font-size: 4rem;
+            opacity: 0.5;
+            margin-bottom: 20px;
+            display: block;
+        }
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: #000000cc;
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            z-index: 1000;
+            padding: 15px;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-box {
+            background: #0e1420;
+            border-radius: 40px;
+            width: 550px;
+            max-width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 30px;
+            border: 1px solid #2c3a58;
+            box-shadow: 0 40px 70px #000000aa;
+            transform: scale(0.95);
+            transition: transform 0.2s;
+        }
+        .modal-overlay.active .modal-box {
+            transform: scale(1);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        .modal-header h2 {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .close-modal {
+            background: none;
+            border: none;
+            color: #9aa9c4;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: 0.2s;
+            line-height: 1;
+        }
+        .close-modal:hover {
+            color: white;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #94a3b8;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 14px 18px;
+            background: #151e2e;
+            border: 1px solid #2e3f5e;
+            border-radius: 16px;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.2s;
+            font-family: inherit;
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px #3b82f630;
+        }
+        .form-hint {
+            color: #64748b;
+            font-size: 0.8rem;
+            margin-top: 6px;
+        }
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(135deg, #16a34a, #15803d);
+            border: none;
+            padding: 16px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 800;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 10px 25px -5px #15803d;
+            margin-top: 5px;
+        }
+        .btn-submit:hover {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+        }
+        .admin-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .admin-tab {
+            flex: 1;
+            min-width: 100px;
+            padding: 11px 8px;
+            background: #151e2e;
+            border: 1px solid #2e3f5e;
+            border-radius: 30px;
+            color: #94a3b8;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+        .admin-tab.active {
+            background: #2563eb;
+            color: white;
+            border-color: #3b82f6;
+        }
+        .admin-tab:hover:not(.active) {
+            background: #1e2a44;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .admin-stats {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .stat-box {
+            flex: 1;
+            background: #151e2e;
+            border-radius: 16px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #2e3f5e;
+        }
+        .stat-box .num {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #facc15;
+        }
+        .stat-box .label {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            margin-top: 4px;
+        }
+        .admin-list-item {
+            background: #151e2e;
+            border-radius: 16px;
+            padding: 14px 18px;
+            margin-bottom: 10px;
+            border: 1px solid #2e3f5e;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .admin-list-item .info {
+            flex: 1;
+            min-width: 160px;
+        }
+        .admin-list-item .info .name {
+            font-weight: 700;
+            color: white;
+            margin-bottom: 4px;
+            font-size: 0.95rem;
+        }
+        .admin-list-item .info .creds {
+            font-family: monospace;
+            color: #94a3b8;
+            font-size: 0.85rem;
+            word-break: break-all;
+        }
+        .admin-list-item .info .creds span {
+            color: #facc15;
+        }
+        .badge-sold {
+            background: #ef444433;
+            color: #ef4444;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            border: 1px solid #ef444466;
+            white-space: nowrap;
+        }
+        .badge-available {
+            background: #22c55e33;
+            color: #22c55e;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            border: 1px solid #22c55e66;
+            white-space: nowrap;
+        }
+        .no-acc {
+            text-align: center;
+            padding: 40px 20px;
+            color: #7a89a3;
+        }
+        .btn-delete-acc {
+            background: #ef444422;
+            border: 1px solid #ef444444;
+            color: #ef4444;
+            padding: 8px 14px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .btn-delete-acc:hover {
+            background: #ef444444;
+        }
+        .btn-edit-acc {
+            background: #3b82f622;
+            border: 1px solid #3b82f644;
+            color: #3b82f6;
+            padding: 8px 14px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .btn-edit-acc:hover {
+            background: #3b82f644;
+        }
+        .admin-product-item {
+            background: #151e2e;
+            border-radius: 16px;
+            padding: 12px;
+            margin-bottom: 10px;
+            border: 1px solid #2e3f5e;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .admin-product-item .pinfo {
+            flex: 1;
+            min-width: 140px;
+        }
+        .admin-product-item .pinfo .pname {
+            font-weight: 700;
+            color: white;
+            margin-bottom: 4px;
+            font-size: 0.95rem;
+        }
+        .admin-product-item .pinfo .pprice {
+            color: #facc15;
+            font-weight: 800;
+            margin-bottom: 4px;
+            font-size: 0.95rem;
+        }
+        .admin-product-item .pinfo .pstock {
+            color: #94a3b8;
+            font-size: 0.8rem;
+        }
+        .qr-section {
+            text-align: center;
+        }
+        .qr-product-info {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            background: #151e2e;
+            border-radius: 18px;
+            padding: 14px;
+            margin-bottom: 20px;
+            border: 1px solid #2e3f5e;
+            text-align: left;
+        }
+        .qr-product-info .info {
+            flex: 1;
+            min-width: 0;
+        }
+        .qr-product-info .info .name {
+            font-weight: 800;
+            color: white;
+            margin-bottom: 4px;
+            font-size: 1rem;
+        }
+        .qr-product-info .info .price {
+            color: #facc15;
+            font-weight: 800;
+            font-size: 1.15rem;
+        }
+        .qr-bank-name {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #151e2e;
+            padding: 10px 22px;
+            border-radius: 40px;
+            border: 1px solid #2e3f5e;
+            margin-bottom: 20px;
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+        .qr-bank-name.tpbank { color: #a855f7; border-color: #a855f760; }
+        .qr-bank-name.mbbank { color: #3b82f6; border-color: #3b82f660; }
+        .qr-bank-name.techcombank { color: #ef4444; border-color: #ef444460; }
+        .qr-frame {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 20px;
+            display: inline-block;
+            box-shadow: 0 15px 40px #00000080;
+            margin-bottom: 20px;
+            max-width: 100%;
+        }
+        .qr-frame img {
+            width: 280px;
+            height: 280px;
+            max-width: 100%;
+            display: block;
+            border-radius: 12px;
+        }
+        .qr-info {
+            background: #151e2e;
+            border-radius: 20px;
+            padding: 18px;
+            margin-bottom: 20px;
+            border: 1px solid #2e3f5e;
+            text-align: left;
+        }
+        .qr-info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .qr-info-row:not(:last-child) {
+            border-bottom: 1px dashed #2e3f5e;
+        }
+        .qr-info-row .label {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .qr-info-row .value {
+            color: #facc15;
+            font-weight: 700;
+            font-family: monospace;
+            font-size: 1.05rem;
+            user-select: all;
+            cursor: pointer;
+            word-break: break-all;
+            text-align: right;
+        }
+        .qr-info-row .value:hover {
+            color: #fde047;
+        }
+        .qr-note {
+            background: #f59e0b15;
+            border: 1px solid #f59e0b40;
+            border-radius: 16px;
+            padding: 14px 18px;
+            color: #fbbf24;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .qr-note i {
+            margin-right: 8px;
+        }
+        .btn-confirm-paid {
+            width: 100%;
+            background: linear-gradient(135deg, #16a34a, #15803d);
+            border: none;
+            padding: 18px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 800;
+            font-size: 1.15rem;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 10px 25px -5px #15803d;
+            margin-bottom: 12px;
+        }
+        .btn-confirm-paid:hover {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            transform: translateY(-2px);
+        }
+        .btn-confirm-paid:disabled {
+            background: #2a2a2a;
+            color: #666;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+        .btn-cancel-qr {
+            width: 100%;
+            background: transparent;
+            border: 1px solid #2e3f5e;
+            padding: 14px;
+            border-radius: 40px;
+            color: #94a3b8;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 1rem;
+        }
+        .btn-cancel-qr:hover {
+            background: #151e2e;
+            color: white;
+        }
+        .success-box {
+            text-align: center;
+            padding: 10px 0;
+        }
+        .success-icon {
+            font-size: 5rem;
+            color: #22c55e;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px #22c55e60;
+            animation: pop 0.5s ease;
+        }
+        @keyframes pop {
+            0% { transform: scale(0); }
+            70% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        .success-title {
+            font-size: 1.7rem;
+            font-weight: 800;
+            color: #22c55e;
+            margin-bottom: 10px;
+        }
+        .success-msg {
+            color: #94a3b8;
+            margin-bottom: 25px;
+        }
+        .credential-box {
+            background: #0b111c;
+            border-radius: 24px;
+            padding: 24px;
+            border: 2px solid #22c55e;
+            box-shadow: 0 0 25px #22c55e40;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .credential-box h3 {
+            color: #22c55e;
+            margin-bottom: 18px;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .credential-item {
+            background: #151e2e;
+            border-radius: 18px;
+            padding: 14px 18px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #2e3f5e;
+            font-size: 1rem;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .credential-label {
+            color: #94a3b8;
+            font-weight: 600;
+        }
+        .credential-value {
+            font-weight: 700;
+            color: white;
+            font-family: monospace;
+            letter-spacing: 1px;
+            background: #1e2a44;
+            padding: 6px 16px;
+            border-radius: 40px;
+            border: 1px solid #3b82f680;
+            word-break: break-all;
+            user-select: all;
+            cursor: pointer;
+        }
+        .credential-value:hover {
+            background: #2a3a5e;
+        }
+        .btn-close-success {
+            background: #1e2a44;
+            border: 1px solid #3b82f6;
+            padding: 14px;
+            width: 100%;
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 1rem;
+        }
+        .btn-close-success:hover {
+            background: #2a3a5e;
+        }
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #0f172a;
+            border-left: 6px solid #3b82f6;
+            padding: 18px 28px;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            transform: translateX(150%);
+            transition: transform 0.4s ease;
+            z-index: 2000;
+            max-width: 350px;
+            color: #e2e8f0;
+            font-weight: 500;
+            backdrop-filter: blur(8px);
+            border: 1px solid #2d3a5e;
+        }
+        .toast.show {
+            transform: translateX(0);
+        }
+        .toast i {
+            color: #3b82f6;
+            margin-right: 12px;
+            font-size: 1.4rem;
+        }
+        .footer-note {
+            text-align: center;
+            margin-top: 50px;
+            color: #4a5a78;
+            font-size: 0.9rem;
+            border-top: 1px solid #1e2a44;
+            padding-top: 30px;
+        }
+
+        /* ============ TRỢ LÝ ẢO ============ */
+        .assistant-btn {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6, #a855f7);
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(59,130,246,0.6);
+            z-index: 1500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+            animation: floatBtn 3s ease-in-out infinite;
+        }
+        @keyframes floatBtn {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+        .assistant-btn:hover {
+            transform: scale(1.1) translateY(-3px);
+            box-shadow: 0 15px 40px rgba(168,85,247,0.8);
+        }
+        .assistant-btn .badge-dot {
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            width: 14px;
+            height: 14px;
+            background: #22c55e;
+            border-radius: 50%;
+            border: 2px solid #0b0e1a;
+            animation: ping 1.5s infinite;
+        }
+        @keyframes ping {
+            0% { box-shadow: 0 0 0 0 rgba(34,197,94,0.7); }
+            100% { box-shadow: 0 0 0 12px rgba(34,197,94,0); }
+        }
+
+        .assistant-panel {
+            position: fixed;
+            bottom: 100px;
+            left: 25px;
+            width: 370px;
+            max-width: calc(100vw - 30px);
+            height: 550px;
+            max-height: calc(100vh - 130px);
+            background: #0e1420;
+            border-radius: 24px;
+            border: 1px solid #2c3a58;
+            box-shadow: 0 30px 70px rgba(0,0,0,0.8);
+            display: flex;
+            flex-direction: column;
+            z-index: 1499;
+            transform: translateY(20px) scale(0.95);
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+        .assistant-panel.active {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .assistant-header {
+            background: linear-gradient(135deg, #1e40af, #7c3aed);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .assistant-header .avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #22c55e, #3b82f6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+        }
+        .assistant-header .info {
+            flex: 1;
+            min-width: 0;
+        }
+        .assistant-header .info .name {
+            color: white;
+            font-weight: 800;
+            font-size: 1rem;
+            margin-bottom: 2px;
+        }
+        .assistant-header .info .status {
+            color: #c7d2fe;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .assistant-header .info .status::before {
+            content: '';
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #22c55e;
+            box-shadow: 0 0 8px #22c55e;
+            animation: blink 1.5s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        .assistant-header .header-actions {
+            display: flex;
+            gap: 6px;
+        }
+        .assistant-header .icon-btn {
+            background: rgba(255,255,255,0.15);
+            border: none;
+            color: white;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+        .assistant-header .icon-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        .assistant-header .icon-btn.active {
+            background: #22c55e;
+            box-shadow: 0 0 12px #22c55e80;
+        }
+
+        .assistant-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: #0b111c;
+        }
+        .assistant-body::-webkit-scrollbar { width: 6px; }
+        .assistant-body::-webkit-scrollbar-thumb {
+            background: #3b82f6; border-radius: 3px;
+        }
+        .msg {
+            max-width: 85%;
+            padding: 11px 15px;
+            border-radius: 16px;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            word-wrap: break-word;
+            white-space: pre-line;
+            animation: msgIn 0.3s ease;
+        }
+        @keyframes msgIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .msg.bot {
+            background: #1e2a44;
+            color: #e2e8f0;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+            border: 1px solid #2e3f5e;
+        }
+        .msg.user {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+            box-shadow: 0 5px 15px rgba(37,99,235,0.4);
+        }
+        .msg.typing {
+            font-style: italic;
+            opacity: 0.7;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .msg.typing .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #94a3b8;
+            animation: dotBounce 1.2s infinite;
+        }
+        .msg.typing .dot:nth-child(2) { animation-delay: 0.15s; }
+        .msg.typing .dot:nth-child(3) { animation-delay: 0.3s; }
+        @keyframes dotBounce {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+            30% { transform: translateY(-5px); opacity: 1; }
+        }
+        .quick-replies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 0 15px 10px;
+            background: #0b111c;
+        }
+        .quick-btn {
+            background: #151e2e;
+            border: 1px solid #2e3f5e;
+            color: #93c5fd;
+            padding: 7px 13px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .quick-btn:hover {
+            background: #1e2a44;
+            border-color: #3b82f6;
+            color: white;
+        }
+        .assistant-input {
+            display: flex;
+            padding: 12px;
+            background: #0e1420;
+            border-top: 1px solid #1e2a44;
+            gap: 8px;
+        }
+        .assistant-input input {
+            flex: 1;
+            padding: 12px 15px;
+            background: #151e2e;
+            border: 1px solid #2e3f5e;
+            border-radius: 25px;
+            color: white;
+            outline: none;
+            font-size: 0.9rem;
+            font-family: inherit;
+        }
+        .assistant-input input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px #3b82f630;
+        }
+        .assistant-input button {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            border: none;
+            color: white;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: 0.2s;
+            flex-shrink: 0;
+        }
+        .assistant-input button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(37,99,235,0.5);
+        }
+        .assistant-input button.mic-btn {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+        .assistant-input button.mic-btn.listening {
+            animation: micPulse 1s infinite;
+        }
+        @keyframes micPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.7); }
+            50% { box-shadow: 0 0 0 12px rgba(239,68,68,0); }
+        }
+        .voice-warning {
+            position: absolute;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ef4444;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            white-space: nowrap;
+            z-index: 10;
+            display: none;
+        }
+
+        @media (max-width: 500px) {
+            .product-content { padding: 25px 20px 30px; }
+            .product-title { font-size: 1.6rem; }
+            .product-price { font-size: 2.3rem; }
+            .logo h1 { font-size: 1.3rem; }
+            header { padding: 15px 20px; }
+            .toast { right: 15px; left: 15px; max-width: none; }
+            .qr-frame img { width: 240px; height: 240px; }
+            .modal-box { padding: 22px; }
+            .product-image-wrap img { height: 200px; }
+            .assistant-panel {
+                left: 15px;
+                right: 15px;
+                width: auto;
+                bottom: 95px;
+            }
+            .assistant-btn {
+                left: 15px;
+                bottom: 15px;
+                width: 58px;
+                height: 58px;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <div class="logo">
+            <i class="fas fa-gamepad"></i>
+            <h1>SHOP ACC GAME</h1>
+        </div>
+        <button class="btn-admin" id="adminBtn">
+            <i class="fas fa-user-shield"></i> ADMIN
+        </button>
+    </header>
+
+    <div class="price-banner">
+        <i class="fas fa-tags"></i> SHOP ACC GAME UY TÍN - THANH TOÁN QR - NHẬN ACC NGAY
+    </div>
+
+    <div class="products-grid" id="productsGrid"></div>
+
+    <div class="footer-note">
+        <i class="fas fa-shield-alt"></i> Giao dịch tự động - Nhận acc ngay sau khi thanh toán
+    </div>
+</div>
+
+<!-- Modal mua hàng / QR / kết quả -->
+<div class="modal-overlay" id="buyModal">
+    <div class="modal-box" id="buyModalBox"></div>
+</div>
+
+<!-- Modal Admin -->
+<div class="modal-overlay" id="adminModal">
+    <div class="modal-box" style="width: 650px;">
+        <div class="modal-header">
+            <h2><i class="fas fa-user-shield" style="color:#facc15;"></i> QUẢN TRỊ SHOP</h2>
+            <button class="close-modal" id="closeAdminModal">&times;</button>
+        </div>
+
+        <div class="admin-tabs">
+            <div class="admin-tab active" data-tab="addProductTab">
+                <i class="fas fa-plus-circle"></i> Thêm SP
+            </div>
+            <div class="admin-tab" data-tab="listProductTab">
+                <i class="fas fa-box"></i> Sản phẩm
+            </div>
+            <div class="admin-tab" data-tab="addAccTab">
+                <i class="fas fa-key"></i> Up Acc
+            </div>
+            <div class="admin-tab" data-tab="listAccTab">
+                <i class="fas fa-list"></i> Kho Acc
+            </div>
+        </div>
+
+        <div class="tab-content active" id="addProductTab">
+            <div class="form-group">
+                <label><i class="fas fa-tag"></i> Tên sản phẩm</label>
+                <input type="text" id="prodName" placeholder="VD: ACC FREE FIRE 40K">
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-money-bill"></i> Giá tiền (VNĐ)</label>
+                <input type="number" id="prodPrice" placeholder="VD: 40000" min="0">
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-align-left"></i> Mô tả</label>
+                <textarea id="prodDesc" placeholder="VD: Acc FF chất lượng, full skin, rank cao..."></textarea>
+            </div>
+            <button class="btn-submit" id="addProductBtn">
+                <i class="fas fa-plus-circle"></i> THÊM SẢN PHẨM
+            </button>
+        </div>
+
+        <div class="tab-content" id="listProductTab">
+            <div id="adminProductList"></div>
+        </div>
+
+        <div class="tab-content" id="addAccTab">
+            <div class="form-group">
+                <label><i class="fas fa-box"></i> Chọn sản phẩm</label>
+                <select id="accProductSelect"></select>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-user"></i> Tài khoản (TK)</label>
+                <input type="text" id="adminAccUser" placeholder="Nhập tài khoản...">
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-lock"></i> Mật khẩu (MK)</label>
+                <input type="text" id="adminAccPass" placeholder="Nhập mật khẩu...">
+            </div>
+            <button class="btn-submit" id="addAccBtn">
+                <i class="fas fa-plus-circle"></i> UP VÀO KHO
+            </button>
+            <div class="form-hint" style="text-align:center; margin-top:10px;">
+                💡 Acc sẽ được thêm vào kho của sản phẩm đã chọn
+            </div>
+        </div>
+
+        <div class="tab-content" id="listAccTab">
+            <div class="form-group">
+                <label><i class="fas fa-filter"></i> Lọc theo sản phẩm</label>
+                <select id="filterProductSelect"></select>
+            </div>
+            <div class="admin-stats">
+                <div class="stat-box">
+                    <div class="num" id="totalAccs">0</div>
+                    <div class="label">Tổng acc</div>
+                </div>
+                <div class="stat-box">
+                    <div class="num" id="availableAccs" style="color:#22c55e;">0</div>
+                    <div class="label">Chưa bán</div>
+                </div>
+                <div class="stat-box">
+                    <div class="num" id="soldAccs" style="color:#ef4444;">0</div>
+                    <div class="label">Đã bán</div>
+                </div>
+            </div>
+            <div id="adminAccList"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Admin Login -->
+<div class="modal-overlay" id="adminLoginModal">
+    <div class="modal-box" style="width:420px;">
+        <div class="modal-header">
+            <h2><i class="fas fa-lock" style="color:#facc15;"></i> ĐĂNG NHẬP ADMIN</h2>
+            <button class="close-modal" id="closeLoginModal">&times;</button>
+        </div>
+        <div class="form-group">
+            <label><i class="fas fa-key"></i> Mật khẩu admin</label>
+            <input type="password" id="adminPassInput" placeholder="Nhập mật khẩu admin...">
+        </div>
+        <button class="btn-submit" id="adminLoginBtn">
+            <i class="fas fa-sign-in-alt"></i> ĐĂNG NHẬP
+        </button>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+    <i class="fas fa-check-circle"></i>
+    <span id="toastMessage">Thông báo!</span>
+</div>
+
+<!-- ============ TRỢ LÝ ẢO ============ -->
+<button class="assistant-btn" id="assistantBtn" title="Trợ lý tư vấn">
+    <i class="fas fa-headset"></i>
+    <span class="badge-dot"></span>
+</button>
+
+<div class="assistant-panel" id="assistantPanel">
+    <div class="assistant-header">
+        <div class="avatar">🤖</div>
+        <div class="info">
+            <div class="name">Trợ Lý Tư Vấn</div>
+            <div class="status">Đang hoạt động</div>
+        </div>
+        <div class="header-actions">
+            <button class="icon-btn" id="voiceToggleBtn" title="Bật/tắt giọng nói">
+                <i class="fas fa-volume-up"></i>
+            </button>
+            <button class="icon-btn" id="closeAssistantBtn" title="Đóng">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+    <div class="voice-warning" id="voiceWarning">
+        <i class="fas fa-exclamation-triangle"></i> Trình duyệt không hỗ trợ đọc
+    </div>
+    <div class="assistant-body" id="assistantBody"></div>
+    <div class="quick-replies" id="quickReplies">
+        <button class="quick-btn" data-q="Shop có gì?">📋 Xem sản phẩm</button>
+        <button class="quick-btn" data-q="Giá bao nhiêu?">💰 Hỏi giá</button>
+        <button class="quick-btn" data-q="Hướng dẫn thanh toán">💳 Thanh toán</button>
+        <button class="quick-btn" data-q="Cách nhận acc">🎁 Nhận acc</button>
+    </div>
+    <div class="assistant-input">
+        <input type="text" id="assistantInput" placeholder="Nhập câu hỏi...">
+        <button class="mic-btn" id="micBtn" title="Nói để tìm kiếm">
+            <i class="fas fa-microphone"></i>
+        </button>
+        <button id="sendAssistantBtn">
+            <i class="fas fa-paper-plane"></i>
+        </button>
+    </div>
+</div>
+
+<script>
+(function() {
+    // ============================================
+    // CẤU HÌNH
+    // ============================================
+    const ADMIN_PASSWORD = 'admin123';
+    const STORAGE_KEY = 'shop_acc_game_data_v3';
+    const FIXED_IMAGE = 'https://i.imgur.com/8YQZ9wL.jpg';
+
+    const BANKS = [
+        { id:'tpbank', displayName:'TPBank', accountName:'LE VAN TUAN', accountNumber:'1000 5684 237', bin:'970423', colorClass:'tpbank', icon:'fa-university' },
+        { id:'mbbank', displayName:'MB Bank', accountName:'LE VAN TUAN', accountNumber:'0365918583', bin:'970422', colorClass:'mbbank', icon:'fa-university' },
+        { id:'techcombank', displayName:'Techcombank', accountName:'LE VAN TUAN', accountNumber:'7811 2299 9999', bin:'970407', colorClass:'techcombank', icon:'fa-university' }
+    ];
+
+    // ============================================
+    // LƯU TRỮ LOCALSTORAGE
+    // ============================================
+    function saveData() {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                products, accountStore, nextProductId, nextAccId
+            }));
+        } catch(e) { console.error('Lỗi lưu:', e); }
+    }
+
+    function loadData() {
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (raw) {
+                const d = JSON.parse(raw);
+                if (d && Array.isArray(d.products) && Array.isArray(d.accountStore)) {
+                    return d;
+                }
+            }
+        } catch(e) { console.error('Lỗi đọc:', e); }
+        return {
+            products: [
+                {
+                    id: 1,
+                    name: 'ACC FREE FIRE 40K',
+                    price: 40000,
+                    desc: 'Acc Free Fire chất lượng, giá rẻ chỉ 40K. Thanh toán QR - Nhận ngay TK/MK sau khi xác nhận.',
+                    createdAt: new Date().toISOString()
+                }
+            ],
+            accountStore: [
+                { id: 1, productId: 1, username: 'ff_pro001', password: 'ffpass123', sold: false },
+                { id: 2, productId: 1, username: 'ff_pro002', password: 'ffpass456', sold: false },
+                { id: 3, productId: 1, username: 'ff_pro003', password: 'ffpass789', sold: false }
+            ],
+            nextProductId: 2,
+            nextAccId: 4
+        };
+    }
+
+    const data = loadData();
+    let products = data.products;
+    let accountStore = data.accountStore;
+    let nextProductId = data.nextProductId || 2;
+    let nextAccId = data.nextAccId || 4;
+
+    let currentPendingAcc = null;
+    let isAdminLoggedIn = false;
+    let editingProductId = null;
+
+    // ============================================
+    // DOM
+    // ============================================
+    const productsGrid = document.getElementById('productsGrid');
+    const buyModal = document.getElementById('buyModal');
+    const buyModalBox = document.getElementById('buyModalBox');
+    const adminBtn = document.getElementById('adminBtn');
+    const adminModal = document.getElementById('adminModal');
+    const adminLoginModal = document.getElementById('adminLoginModal');
+    const closeAdminModal = document.getElementById('closeAdminModal');
+    const closeLoginModal = document.getElementById('closeLoginModal');
+    const adminPassInput = document.getElementById('adminPassInput');
+    const adminLoginBtn = document.getElementById('adminLoginBtn');
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toastMessage');
+
+    // ============================================
+    // TIỆN ÍCH
+    // ============================================
+    let toastTimeout;
+    function showToast(msg, isSuccess = true) {
+        toastMessage.textContent = msg;
+        toast.querySelector('i').className = isSuccess ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+        toast.style.borderLeftColor = isSuccess ? '#3b82f6' : '#ef4444';
+        toast.classList.add('show');
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    function formatPrice(p) { return Number(p).toLocaleString('vi-VN') + ' VNĐ'; }
+    function getAvailableByProduct(productId) {
+        return accountStore.filter(a => a.productId === productId && !a.sold);
+    }
+    function buildQRUrl(bank, amount, info) {
+        const accountNo = bank.accountNumber.replace(/\s/g, '');
+        return `https://img.vietqr.io/image/${bank.bin}-${accountNo}-compact2.png?amount=${amount}&addInfo=${encodeURIComponent(info)}&accountName=${encodeURIComponent(bank.accountName)}`;
+    }
+    function randomBank() { return BANKS[Math.floor(Math.random() * BANKS.length)]; }
+    function buildTransferInfo() { return 'SHOP ' + Math.random().toString(36).substring(2, 8).toUpperCase(); }
+
+    // ============================================
+    // RENDER TRANG CHỦ
+    // ============================================
+    function renderProducts() {
+        if (products.length === 0) {
+            productsGrid.innerHTML = `<div class="empty-shop">
+                <i class="fas fa-store-slash"></i>
+                <h3 style="font-size:1.4rem; margin-bottom:10px; color:#9aa9c4;">Shop chưa có sản phẩm</h3>
+                <p>Vui lòng chờ admin thêm sản phẩm mới.</p>
+            </div>`;
+            return;
+        }
+
+        productsGrid.innerHTML = products.map(p => {
+            const available = getAvailableByProduct(p.id).length;
+            const total = accountStore.filter(a => a.productId === p.id).length;
+            let stockClass, stockText, disabled;
+            if (total === 0) {
+                stockClass = 'out-stock';
+                stockText = '<i class="fas fa-times-circle"></i> Chưa có acc';
+                disabled = true;
+            } else if (available === 0) {
+                stockClass = 'out-stock';
+                stockText = '<i class="fas fa-exclamation-triangle"></i> Tạm hết hàng';
+                disabled = true;
+            } else {
+                stockClass = 'in-stock';
+                stockText = `<i class="fas fa-check-circle"></i> Còn hàng: ${available}/${total} acc`;
+                disabled = false;
+            }
+
+            return `
+                <div class="product-card">
+                    <div class="product-image-wrap">
+                        <div class="product-image-badge">🔥 HOT</div>
+                        <img src="${FIXED_IMAGE}" alt="${p.name}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 280%22><defs><linearGradient id=%22g%22 x1=%220%22 y1=%220%22 x2=%221%22 y2=%221%22><stop offset=%220%22 stop-color=%22%233b82f6%22/><stop offset=%221%22 stop-color=%22%23a855f7%22/></linearGradient></defs><rect width=%22400%22 height=%22280%22 fill=%22url(%23g)%22/><text x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22white%22 font-size=%2240%22 font-family=%22Arial%22>ACC GAME</text></svg>'">
+                        <div class="product-image-overlay"></div>
+                    </div>
+                    <div class="product-content">
+                        <div class="product-title">${p.name}</div>
+                        <div class="product-desc">${p.desc || 'Sản phẩm chất lượng cao, giao dịch tự động.'}</div>
+                        <div class="product-price">${formatPrice(p.price)}</div>
+                        <div class="stock-info ${stockClass}">${stockText}</div>
+                        <button class="btn-buy" data-id="${p.id}" ${disabled ? 'disabled' : ''}>
+                            <i class="fas fa-qrcode"></i> MUA NGAY
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        document.querySelectorAll('.btn-buy').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const pid = Number(btn.dataset.id);
+                handleBuy(pid);
+            });
+        });
+    }
+
+    // ============================================
+    // MUA HÀNG
+    // ============================================
+    function handleBuy(productId) {
+        const product = products.find(p => p.id === productId);
+        if (!product) return showToast('Sản phẩm không tồn tại!', false);
+
+        const available = getAvailableByProduct(productId);
+        if (available.length === 0) return showToast('Sản phẩm đã hết hàng!', false);
+
+        const acc = available[0];
+        const bank = randomBank();
+        const transferInfo = buildTransferInfo();
+        currentPendingAcc = { acc, product };
+
+        showQRModal(product, bank, transferInfo);
+    }
+
+    function showQRModal(product, bank, transferInfo) {
+        const qrUrl = buildQRUrl(bank, product.price, transferInfo);
+
+        buyModalBox.innerHTML = `
+            <div class="modal-header">
+                <h2><i class="fas fa-qrcode" style="color:#3b82f6;"></i> THANH TOÁN QR</h2>
+                <button class="close-modal" id="closeQRModal">&times;</button>
+            </div>
+
+            <div class="qr-section">
+                <div class="qr-product-info">
+                    <div class="info">
+                        <div class="name">${product.name}</div>
+                        <div class="price">${formatPrice(product.price)}</div>
+                    </div>
+                </div>
+
+                <div class="qr-bank-name ${bank.colorClass}">
+                    <i class="fas ${bank.icon}"></i> ${bank.displayName}
+                </div>
+
+                <div class="qr-frame">
+                    <img src="${qrUrl}" alt="QR thanh toán ${bank.displayName}" 
+                         onerror="this.onerror=null; this.parentElement.innerHTML='<div style=\\'padding:40px; color:#666; text-align:center;\\'><i class=\\'fas fa-exclamation-triangle\\' style=\\'font-size:2rem; margin-bottom:10px; display:block;\\'></i>Không tải được QR<br><small>Vui lòng chuyển khoản thủ công</small></div>';">
+                </div>
+
+                <div class="qr-info">
+                    <div class="qr-info-row">
+                        <span class="label"><i class="fas fa-user"></i> Chủ TK:</span>
+                        <span class="value" onclick="copyText(this)">${bank.accountName}</span>
+                    </div>
+                    <div class="qr-info-row">
+                        <span class="label"><i class="fas fa-credit-card"></i> Số TK:</span>
+                        <span class="value" onclick="copyText(this)">${bank.accountNumber}</span>
+                    </div>
+                    <div class="qr-info-row">
+                        <span class="label"><i class="fas fa-money-bill"></i> Số tiền:</span>
+                        <span class="value" onclick="copyText(this)">${formatPrice(product.price)}</span>
+                    </div>
+                    <div class="qr-info-row">
+                        <span class="label"><i class="fas fa-comment"></i> Nội dung:</span>
+                        <span class="value" onclick="copyText(this)">${transferInfo}</span>
+                    </div>
+                </div>
+
+                <div class="qr-note">
+                    <i class="fas fa-info-circle"></i>
+                    Quét mã QR bằng app ngân hàng để thanh toán. 
+                    <strong>Ghi đúng nội dung chuyển khoản</strong> để được xử lý nhanh.
+                    Sau khi chuyển khoản thành công, nhấn nút bên dưới để nhận acc.
+                </div>
+
+                <button class="btn-confirm-paid" id="confirmPaidBtn">
+                    <i class="fas fa-check-double"></i> TÔI ĐÃ THANH TOÁN
+                </button>
+                <button class="btn-cancel-qr" id="cancelQRBtn">
+                    <i class="fas fa-times"></i> HỦY
+                </button>
+            </div>
+        `;
+
+        document.getElementById('closeQRModal').addEventListener('click', closeBuyModal);
+        document.getElementById('cancelQRBtn').addEventListener('click', closeBuyModal);
+        document.getElementById('confirmPaidBtn').addEventListener('click', confirmPayment);
+        buyModal.classList.add('active');
+    }
+
+    function confirmPayment() {
+        if (!currentPendingAcc) {
+            showToast('Có lỗi xảy ra!', false);
+            closeBuyModal();
+            return;
+        }
+
+        const { acc, product } = currentPendingAcc;
+        const idx = accountStore.findIndex(a => a.id === acc.id);
+        if (idx !== -1) {
+            accountStore[idx].sold = true;
+            accountStore[idx].soldAt = new Date().toISOString();
+        }
+
+        saveData();
+        currentPendingAcc = null;
+
+        renderProducts();
+        renderAdminProductList();
+        renderAdminAccList();
+        showSuccessModal(acc, product);
+    }
+
+    function showSuccessModal(acc, product) {
+        buyModalBox.innerHTML = `
+            <div class="modal-header">
+                <h2><i class="fas fa-check-circle" style="color:#22c55e;"></i> MUA THÀNH CÔNG</h2>
+                <button class="close-modal" id="closeBuyModal">&times;</button>
+            </div>
+            <div class="success-box">
+                <div class="success-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="success-title">THANH TOÁN THÀNH CÔNG</div>
+                <div class="success-msg">Thông tin acc <b>${product.name}</b> của bạn:</div>
+
+                <div class="credential-box">
+                    <h3><i class="fas fa-key"></i> THÔNG TIN ACC</h3>
+                    <div class="credential-item">
+                        <span class="credential-label"><i class="fas fa-user"></i> Tài khoản:</span>
+                        <span class="credential-value" onclick="copyText(this)">${acc.username}</span>
+                    </div>
+                    <div class="credential-item">
+                        <span class="credential-label"><i class="fas fa-lock"></i> Mật khẩu:</span>
+                        <span class="credential-value" onclick="copyText(this)">${acc.password}</span>
+                    </div>
+                </div>
+
+                <button class="btn-close-success" id="closeSuccessBtn">
+                    <i class="fas fa-check"></i> ĐÓNG
+                </button>
+            </div>
+        `;
+
+        document.getElementById('closeBuyModal').addEventListener('click', closeBuyModal);
+        document.getElementById('closeSuccessBtn').addEventListener('click', closeBuyModal);
+    }
+
+    function closeBuyModal() {
+        buyModal.classList.remove('active');
+        currentPendingAcc = null;
+    }
+
+    window.copyText = function(el) {
+        const text = el.textContent.trim();
+        navigator.clipboard.writeText(text).then(() => {
+            showToast('📋 Đã copy: ' + text);
+        }).catch(() => {
+            const range = document.createRange();
+            range.selectNode(el);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            document.execCommand('copy');
+            showToast('📋 Đã copy!');
+        });
+    };
+
+    // ============================================
+    // ADMIN LOGIN
+    // ============================================
+    adminBtn.addEventListener('click', () => {
+        if (isAdminLoggedIn) {
+            openAdminPanel();
+        } else {
+            adminPassInput.value = '';
+            adminLoginModal.classList.add('active');
+            setTimeout(() => adminPassInput.focus(), 100);
+        }
+    });
+
+    adminLoginBtn.addEventListener('click', () => {
+        const pass = adminPassInput.value;
+        if (pass === ADMIN_PASSWORD) {
+            isAdminLoggedIn = true;
+            adminLoginModal.classList.remove('active');
+            openAdminPanel();
+            showToast('✅ Đăng nhập admin thành công!');
+        } else {
+            showToast('❌ Sai mật khẩu admin!', false);
+        }
+    });
+
+    adminPassInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') adminLoginBtn.click();
+    });
+
+    closeLoginModal.addEventListener('click', () => adminLoginModal.classList.remove('active'));
+    closeAdminModal.addEventListener('click', () => adminModal.classList.remove('active'));
+    adminModal.addEventListener('click', (e) => { if (e.target === adminModal) adminModal.classList.remove('active'); });
+    buyModal.addEventListener('click', (e) => { if (e.target === buyModal) closeBuyModal(); });
+    adminLoginModal.addEventListener('click', (e) => { if (e.target === adminLoginModal) adminLoginModal.classList.remove('active'); });
+
+    function openAdminPanel() {
+        adminModal.classList.add('active');
+        renderAdminProductList();
+        renderAdminAccList();
+        renderProductSelects();
+        resetProductForm();
+    }
+
+    // ============================================
+    // TAB ADMIN
+    // ============================================
+    document.querySelectorAll('.admin-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            tab.classList.add('active');
+            document.getElementById(tab.dataset.tab).classList.add('active');
+
+            if (tab.dataset.tab === 'listProductTab') renderAdminProductList();
+            if (tab.dataset.tab === 'listAccTab') renderAdminAccList();
+            if (tab.dataset.tab === 'addAccTab') renderProductSelects();
+        });
+    });
+
+    // ============================================
+    // QUẢN LÝ SẢN PHẨM
+    // ============================================
+    function resetProductForm() {
+        document.getElementById('prodName').value = '';
+        document.getElementById('prodPrice').value = '';
+        document.getElementById('prodDesc').value = '';
+        editingProductId = null;
+        document.getElementById('addProductBtn').innerHTML = '<i class="fas fa-plus-circle"></i> THÊM SẢN PHẨM';
+    }
+
+    document.getElementById('addProductBtn').addEventListener('click', () => {
+        const name = document.getElementById('prodName').value.trim();
+        const price = Number(document.getElementById('prodPrice').value);
+        const desc = document.getElementById('prodDesc').value.trim();
+
+        if (!name) return showToast('Nhập tên sản phẩm!', false);
+        if (!price || price < 0) return showToast('Nhập giá tiền hợp lệ!', false);
+
+        if (editingProductId) {
+            const idx = products.findIndex(p => p.id === editingProductId);
+            if (idx !== -1) {
+                products[idx] = { ...products[idx], name, price, desc };
+            }
+            showToast('✅ Đã cập nhật sản phẩm!');
+        } else {
+            products.push({
+                id: nextProductId++,
+                name, price, desc,
+                createdAt: new Date().toISOString()
+            });
+            showToast('✅ Đã thêm sản phẩm mới!');
+        }
+
+        saveData();
+        resetProductForm();
+        renderProducts();
+        renderAdminProductList();
+        renderProductSelects();
+    });
+
+    function renderAdminProductList() {
+        const container = document.getElementById('adminProductList');
+        if (products.length === 0) {
+            container.innerHTML = `<div class="no-acc">
+                <i class="fas fa-box-open" style="font-size:3rem; opacity:0.5; margin-bottom:15px; display:block;"></i>
+                <p>Chưa có sản phẩm nào</p>
+            </div>`;
+            return;
+        }
+
+        container.innerHTML = products.map(p => {
+            const total = accountStore.filter(a => a.productId === p.id).length;
+            const avail = accountStore.filter(a => a.productId === p.id && !a.sold).length;
+            return `
+                <div class="admin-product-item">
+                    <div class="pinfo">
+                        <div class="pname">${p.name}</div>
+                        <div class="pprice">${formatPrice(p.price)}</div>
+                        <div class="pstock">Kho: ${avail}/${total} acc</div>
+                    </div>
+                    <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                        <button class="btn-edit-acc" onclick="editProduct(${p.id})">
+                            <i class="fas fa-edit"></i> Sửa
+                        </button>
+                        <button class="btn-delete-acc" onclick="deleteProduct(${p.id})">
+                            <i class="fas fa-trash"></i> Xóa
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    window.editProduct = function(id) {
+        const p = products.find(x => x.id === id);
+        if (!p) return;
+        document.getElementById('prodName').value = p.name;
+        document.getElementById('prodPrice').value = p.price;
+        document.getElementById('prodDesc').value = p.desc || '';
+        editingProductId = id;
+        document.getElementById('addProductBtn').innerHTML = '<i class="fas fa-save"></i> CẬP NHẬT SẢN PHẨM';
+        document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        document.querySelector('[data-tab="addProductTab"]').classList.add('active');
+        document.getElementById('addProductTab').classList.add('active');
+        showToast('✏️ Đang sửa sản phẩm');
+    };
+
+    window.deleteProduct = function(id) {
+        const p = products.find(x => x.id === id);
+        if (!p) return;
+        const accCount = accountStore.filter(a => a.productId === id).length;
+        if (!confirm(`Xóa sản phẩm "${p.name}"?\n${accCount} acc trong kho cũng sẽ bị xóa!`)) return;
+
+        products = products.filter(x => x.id !== id);
+        accountStore = accountStore.filter(a => a.productId !== id);
+        saveData();
+        renderProducts();
+        renderAdminProductList();
+        renderProductSelects();
+        renderAdminAccList();
+        showToast('🗑️ Đã xóa sản phẩm!');
+    };
+
+    // ============================================
+    // QUẢN LÝ ACC
+    // ============================================
+    function renderProductSelects() {
+        const selectAdd = document.getElementById('accProductSelect');
+        const selectFilter = document.getElementById('filterProductSelect');
+
+        const options = products.map(p => `<option value="${p.id}">${p.name} (${formatPrice(p.price)})</option>`).join('');
+
+        if (products.length === 0) {
+            selectAdd.innerHTML = '<option value="">-- Chưa có sản phẩm --</option>';
+            selectFilter.innerHTML = '<option value="">-- Chưa có sản phẩm --</option>';
+            return;
+        }
+
+        selectAdd.innerHTML = options;
+        selectFilter.innerHTML = '<option value="all">-- Tất cả sản phẩm --</option>' + options;
+    }
+
+    document.getElementById('filterProductSelect').addEventListener('change', renderAdminAccList);
+
+    document.getElementById('addAccBtn').addEventListener('click', () => {
+        const productId = Number(document.getElementById('accProductSelect').value);
+        const username = document.getElementById('adminAccUser').value.trim();
+        const password = document.getElementById('adminAccPass').value.trim();
+
+        if (!productId) return showToast('Chọn sản phẩm!', false);
+        if (!username || !password) return showToast('Nhập đủ TK và MK!', false);
+
+        if (accountStore.some(a => a.username === username)) {
+            return showToast('TK này đã tồn tại!', false);
+        }
+
+        accountStore.push({
+            id: nextAccId++,
+            productId,
+            username,
+            password,
+            sold: false,
+            soldAt: null,
+            createdAt: new Date().toISOString()
+        });
+
+        saveData();
+        document.getElementById('adminAccUser').value = '';
+        document.getElementById('adminAccPass').value = '';
+
+        renderAdminAccList();
+        renderAdminProductList();
+        renderProducts();
+        const p = products.find(x => x.id === productId);
+        showToast(`✅ Đã up acc vào "${p.name}"!`);
+    });
+
+    document.getElementById('adminAccPass').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') document.getElementById('addAccBtn').click();
+    });
+
+    function renderAdminAccList() {
+        const filter = document.getElementById('filterProductSelect').value;
+        let list = accountStore;
+        if (filter && filter !== 'all') {
+            list = list.filter(a => a.productId === Number(filter));
+        }
+
+        const total = list.length;
+        const sold = list.filter(a => a.sold).length;
+
+        document.getElementById('totalAccs').textContent = total;
+        document.getElementById('availableAccs').textContent = total - sold;
+        document.getElementById('soldAccs').textContent = sold;
+
+        const container = document.getElementById('adminAccList');
+        if (total === 0) {
+            container.innerHTML = `<div class="no-acc">
+                <i class="fas fa-box-open" style="font-size:3rem; opacity:0.5; margin-bottom:15px; display:block;"></i>
+                <p>Không có acc nào</p>
+            </div>`;
+            return;
+        }
+
+        const sorted = [...list].reverse();
+        container.innerHTML = sorted.map(acc => {
+            const p = products.find(x => x.id === acc.productId);
+            const pname = p ? p.name : '(SP đã xóa)';
+            return `
+                <div class="admin-list-item">
+                    <div class="info">
+                        <div class="name">#${acc.id} - ${pname}</div>
+                        <div class="creds">TK: <span>${acc.username}</span> | MK: <span>${acc.password}</span></div>
+                    </div>
+                    <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+                        ${acc.sold ? '<span class="badge-sold">ĐÃ BÁN</span>' : '<span class="badge-available">CHƯA BÁN</span>'}
+                        <button class="btn-delete-acc" onclick="deleteAcc(${acc.id})"><i class="fas fa-trash"></i> Xóa</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    window.deleteAcc = function(id) {
+        if (!confirm('Xóa acc #' + id + '?')) return;
+        accountStore = accountStore.filter(a => a.id !== id);
+        saveData();
+        renderAdminAccList();
+        renderAdminProductList();
+        renderProducts();
+        showToast('🗑️ Đã xóa acc #' + id);
+    };
+
+    // ============================================
+    // KHỞI TẠO
+    // ============================================
+    renderProducts();
+    renderProductSelects();
+
+    // ==================================================================
+    // ==================== TRỢ LÝ ẢO TƯ VẤN ============================
+    // ==================================================================
+
+    const assistantBtn = document.getElementById('assistantBtn');
+    const assistantPanel = document.getElementById('assistantPanel');
+    const closeAssistantBtn = document.getElementById('closeAssistantBtn');
+    const assistantBody = document.getElementById('assistantBody');
+    const assistantInput = document.getElementById('assistantInput');
+    const sendAssistantBtn = document.getElementById('sendAssistantBtn');
+    const micBtn = document.getElementById('micBtn');
+    const voiceToggleBtn = document.getElementById('voiceToggleBtn');
+    const quickReplies = document.getElementById('quickReplies');
+    const voiceWarning = document.getElementById('voiceWarning');
+
+    let assistantOpen = false;
+    let voiceEnabled = true;
+    let isSpeaking = false;
+    let isListening = false;
+    let voicesLoaded = false;
+    let vietnameseVoice = null;
+
+    // Kiểm tra hỗ trợ
+    const speechSupported = 'speechSynthesis' in window;
+    const recognitionSupported = 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
+
+    // ============ VOICE (TEXT-TO-SPEECH) ============
+    function loadVoices() {
+        if (!speechSupported) return;
+        const voices = speechSynthesis.getVoices();
+        // Tìm giọng tiếng Việt (ưu tiên vi-VN, sau đó vi)
+        vietnameseVoice = voices.find(v => v.lang === 'vi-VN')
+                       || voices.find(v => v.lang === 'vi')
+                       || voices.find(v => v.lang.startsWith('vi'));
+        voicesLoaded = true;
+        if (!vietnameseVoice) {
+            console.warn('Không tìm thấy giọng tiếng Việt');
+        }
+    }
+
+    if (speechSupported) {
+        loadVoices();
+        speechSynthesis.onvoiceschanged = loadVoices;
+    }
+
+    function speak(text) {
+        if (!speechSupported || !voiceEnabled) return;
+        // Cắt bớt text quá dài
+        const cleanText = text.replace(/[📦💰📝💳🎁✅❌🔥💡⚙️👑🤖👋]/g, '').trim();
+        if (!cleanText) return;
+
+        // Dừng câu đang nói
+        speechSynthesis.cancel();
+
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        utterance.lang = 'vi-VN';
+        utterance.rate = 1.0;
+        utterance.pitch = 1.0;
+        utterance.volume = 1.0;
+
+        if (vietnameseVoice) {
+            utterance.voice = vietnameseVoice;
+        }
+
+        utterance.onstart = () => { isSpeaking = true; };
+        utterance.onend = () => { isSpeaking = false; };
+        utterance.onerror = () => { isSpeaking = false; };
+
+        speechSynthesis.speak(utterance);
+    }
+
+    voiceToggleBtn.addEventListener('click', () => {
+        voiceEnabled = !voiceEnabled;
+        voiceToggleBtn.classList.toggle('active', voiceEnabled);
+        voiceToggleBtn.innerHTML = voiceEnabled 
+            ? '<i class="fas fa-volume-up"></i>' 
+            : '<i class="fas fa-volume-mute"></i>';
+        
+        if (!voiceEnabled && speechSupported) {
+            speechSynthesis.cancel();
+        }
+        showToast(voiceEnabled ? '🔊 Đã bật giọng nói' : '🔇 Đã tắt giọng nói');
+    });
+    // Mặc định bật
+    voiceToggleBtn.classList.add('active');
+
+    // Ẩn cảnh báo nếu không hỗ trợ
+    if (!speechSupported) {
+        voiceWarning.style.display = 'block';
+        setTimeout(() => voiceWarning.style.display = 'none', 4000);
+        voiceToggleBtn.style.opacity = '0.4';
+        voiceToggleBtn.style.cursor = 'not-allowed';
+    }
+
+    // ============ SPEECH-TO-TEXT (MIC) ============
+    let recognition = null;
+    if (recognitionSupported) {
+        const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+        recognition = new SR();
+        recognition.lang = 'vi-VN';
+        recognition.continuous = false;
+        recognition.interimResults = false;
+
+        recognition.onstart = () => {
+            isListening = true;
+            micBtn.classList.add('listening');
+            micBtn.innerHTML = '<i class="fas fa-stop"></i>';
+        };
+
+        recognition.onend = () => {
+            isListening = false;
+            micBtn.classList.remove('listening');
+            micBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+        };
+
+        recognition.onerror = (e) => {
+            isListening = false;
+            micBtn.classList.remove('listening');
+            micBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+            if (e.error !== 'aborted' && e.error !== 'no-speech') {
+                showToast('Không nhận diện được giọng nói', false);
+            }
+        };
+
+        recognition.onresult = (e) => {
+            const text = e.results[0][0].transcript;
+            assistantInput.value = text;
+            setTimeout(() => sendAssistantMsg(), 200);
+        };
+    } else {
+        micBtn.style.opacity = '0.4';
+        micBtn.style.cursor = 'not-allowed';
+    }
+
+    micBtn.addEventListener('click', () => {
+        if (!recognitionSupported) {
+            showToast('Trình duyệt không hỗ trợ nhận diện giọng nói', false);
+            return;
+        }
+        if (isListening) {
+            recognition.stop();
+        } else {
+            try { recognition.start(); } catch(e) {}
+        }
+    });
+
+    // ============ OPEN/CLOSE ============
+    assistantBtn.addEventListener('click', () => {
+        assistantOpen = !assistantOpen;
+        assistantPanel.classList.toggle('active', assistantOpen);
+        if (assistantOpen && assistantBody.children.length === 0) {
+            welcomeUser();
+        }
+    });
+
+    closeAssistantBtn.addEventListener('click', () => {
+        assistantOpen = false;
+        assistantPanel.classList.remove('active');
+        if (speechSupported) speechSynthesis.cancel();
+    });
+
+    function welcomeUser() {
+        const avail = products.filter(p => getAvailableByProduct(p.id).length > 0).length;
+        const welcome = `Xin chào! Mình là trợ lý tư vấn của shop. Shop đang có ${products.length} sản phẩm, trong đó ${avail} sản phẩm còn hàng. Bạn muốn tư vấn sản phẩm nào?`;
+        addAssistantMsg(welcome, 'bot', true);
+    }
+
+    // ============ SEND MESSAGE ============
+    function addAssistantMsg(text, sender, speakIt = false) {
+        const msg = document.createElement('div');
+        msg.className = 'msg ' + sender;
+        msg.textContent = text;
+        assistantBody.appendChild(msg);
+        assistantBody.scrollTop = assistantBody.scrollHeight;
+        
+        if (speakIt && sender === 'bot') {
+            speak(text);
+        }
+    }
+
+    function addTyping() {
+        const msg = document.createElement('div');
+        msg.className = 'msg bot typing';
+        msg.id = 'typingIndicator';
+        msg.innerHTML = '<span class="dot"></span><span class="dot"></span><span class="dot"></span>';
+        assistantBody.appendChild(msg);
+        assistantBody.scrollTop = assistantBody.scrollHeight;
+    }
+
+    function removeTyping() {
+        const t = document.getElementById('typingIndicator');
+        if (t) t.remove();
+    }
+
+    function sendAssistantMsg() {
+        const text = assistantInput.value.trim();
+        if (!text) return;
+        addAssistantMsg(text, 'user');
+        assistantInput.value = '';
+        addTyping();
+
+        setTimeout(() => {
+            removeTyping();
+            const reply = getAssistantReply(text);
+            addAssistantMsg(reply, 'bot', true);
+        }, 600);
+    }
+
+    sendAssistantBtn.addEventListener('click', sendAssistantMsg);
+    assistantInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendAssistantMsg();
+    });
+
+    // Quick replies
+    quickReplies.addEventListener('click', (e) => {
+        if (e.target.classList.contains('quick-btn')) {
+            assistantInput.value = e.target.dataset.q;
+            sendAssistantMsg();
+        }
+    });
+
+    // ============================================
+    // BỘ NÃO TRỢ LÝ ẢO
+    // ============================================
+    function getAssistantReply(msg) {
+        const t = msg.toLowerCase().trim();
+        const availProducts = products.filter(p => getAvailableByProduct(p.id).length > 0);
+
+        // ===== CHÀO HỎI =====
+        if (/^(hi|hello|chào|chao|hế lô|helo|alo|xin chào)/.test(t)) {
+            return 'Chào bạn 👋 Mình có thể tư vấn sản phẩm, giá, cách thanh toán và nhận acc. Bạn cần hỗ trợ gì?';
+        }
+
+        // ===== SẢN PHẨM / DANH SÁCH =====
+        if (/(shop có gì|danh sách|sản phẩm|san pham|liệt kê|liet ke|xem hàng|xem hang)/.test(t)) {
+            if (products.length === 0) return 'Shop hiện chưa có sản phẩm nào. Bạn vui lòng quay lại sau nhé!';
+            let reply = `📋 Shop hiện có ${products.length} sản phẩm:\n\n`;
+            products.forEach((p, i) => {
+                const avail = getAvailableByProduct(p.id).length;
+                const status = avail > 0 ? `✅ Còn ${avail} acc` : '❌ Hết hàng';
+                reply += `${i+1}. ${p.name} - ${formatPrice(p.price)} (${status})\n`;
+            });
+            reply += '\n💡 Bạn muốn tư vấn sản phẩm nào?';
+            return reply;
+        }
+
+        // ===== TÌM SẢN PHẨM CỤ THỂ =====
+        for (const p of products) {
+            const key = p.name.toLowerCase();
+            if (t.includes(key) || key.includes(t.replace(/[?？]/g, '').trim())) {
+                const avail = getAvailableByProduct(p.id).length;
+                if (avail > 0) {
+                    return `📦 ${p.name}\n💰 Giá: ${formatPrice(p.price)}\n📝 ${p.desc}\n✅ Còn ${avail} acc\n\n👉 Bạn nhấn "MUA NGAY" để thanh toán QR và nhận acc tự động!`;
+                } else {
+                    return `📦 ${p.name}\n💰 Giá: ${formatPrice(p.price)}\n❌ Tạm hết hàng. Bạn tham khảo sản phẩm khác nhé!`;
+                }
+            }
+        }
+
+        // ===== HỎI GIÁ =====
+        if (/(giá|gia|bao nhiêu|bao nhieu|nhiêu|nhieu)/.test(t)) {
+            if (availProducts.length === 0) return 'Hiện shop đang hết hàng. Vui lòng quay lại sau nhé!';
+            let reply = '💰 Bảng giá các sản phẩm:\n\n';
+            availProducts.forEach(p => {
+                reply += `• ${p.name}: ${formatPrice(p.price)}\n`;
+            });
+            reply += '\nBạn quan tâm sản phẩm nào?';
+            return reply;
+        }
+
+        // ===== THANH TOÁN =====
+        if (/(thanh toán|thanh toan|chuyển khoản|chuyen khoan|qr|bank|ngân hàng|ngan hang|trả tiền|tra tien)/.test(t)) {
+            return `💳 HƯỚNG DẪN THANH TOÁN:\n\n1️⃣ Chọn sản phẩm và nhấn "MUA NGAY"\n2️⃣ Quét mã QR bằng app ngân hàng (TPBank / MB / Techcombank)\n3️⃣ Chuyển đúng số tiền và nội dung\n4️⃣ Nhấn "TÔI ĐÃ THANH TOÁN" để nhận acc ngay\n\n⚡ Hệ thống tự động gửi TK/MK sau khi xác nhận!`;
+        }
+
+        // ===== NHẬN ACC =====
+        if (/(nhận acc|nhan acc|cách nhận|cach nhan|sau khi thanh toán|giao acc)/.test(t)) {
+            return `🎁 CÁCH NHẬN ACC:\n\n✅ Sau khi chuyển khoản thành công\n✅ Nhấn nút "TÔI ĐÃ THANH TOÁN"\n✅ Hệ thống hiện ngay TK/MK của acc\n✅ Bạn copy và đăng nhập luôn\n\n⏱️ Nhận acc chỉ trong vài giây!`;
+        }
+
+        // ===== HỎI VỀ ACC =====
+        if (/(acc|tài khoản|tai khoan|clone|tk)/.test(t)) {
+            if (availProducts.length === 0) return 'Hiện shop đang hết acc. Bạn quay lại sau nhé!';
+            return `🎮 Shop có các acc sau:\n\n${availProducts.map(p => `• ${p.name} - ${formatPrice(p.price)}`).join('\n')}\n\n👉 Nhấn "MUA NGAY" ở sản phẩm bạn muốn!`;
+        }
+
+        // ===== HỎI CÁCH CHƠI / UY TÍN =====
+        if (/(uy tín|uy tin|tin cậy|tin cay|scam|lừa đảo|lua dao)/.test(t)) {
+            return '✅ Shop giao dịch tự động 100%, uy tín hàng đầu!\n✅ Thanh toán qua QR ngân hàng chính chủ\n✅ Nhận acc ngay sau khi thanh toán\n✅ Hỗ trợ 24/7 qua trợ lý ảo này';
+        }
+
+        // ===== KHUYẾN MÃI =====
+        if (/(khuyến mãi|khuyen mai|giảm giá|giam gia|sale|voucher)/.test(t)) {
+            return '🎉 Hiện shop chưa có chương trình khuyến mãi. Nhưng giá đã rất cạnh tranh rồi đó! Bạn tham khảo sản phẩm nhé 😊';
+        }
+
+        // ===== CẢM ƠN =====
+        if (/(cảm ơn|cam on|thank|tks|thanks|ok|oke)/.test(t)) {
+            return 'Dạ không có gì ạ 😊 Chúc bạn chơi game vui vẻ! Nếu cần gì cứ hỏi mình nhé!';
+        }
+
+        // ===== TẠM BIỆT =====
+        if (/(bye|tạm biệt|tam biet|goodbye)/.test(t)) {
+            return 'Tạm biệt bạn 👋 Hẹn gặp lại!';
+        }
+
+        // ===== HỎI THÔNG TIN SHOP =====
+        if (/(shop là gì|shop la gi|giới thiệu|gioi thieu|ai|admin)/.test(t)) {
+            return '🏪 SHOP ACC GAME - Chuyên cung cấp acc game chất lượng, giá rẻ, giao dịch tự động 24/7. Thanh toán QR tiện lợi, nhận acc ngay!';
+        }
+
+        // ===== MẶC ĐỊNH =====
+        return `Mình chưa hiểu rõ câu hỏi của bạn 🤔\n\nBạn có thể hỏi mình về:\n• 📋 Danh sách sản phẩm\n• 💰 Giá cả\n• 💳 Cách thanh toán\n• 🎁 Cách nhận acc\n• 🏪 Thông tin shop\n\nHoặc bấm vào các gợi ý nhanh bên dưới nha!`;
+    }
+
+})();
+</script>
+</body>
+</html>
